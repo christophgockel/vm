@@ -19,6 +19,9 @@ The steps taken care of by the `Makefile` are as follows:
 
 1. Check if all the necessary components are available (and install what's missing)
 2. Use Packer to create the base ISO image and build a Vagrant box with it
+3. Adds the newly created box to Vagrant
+
+From there on the new VM is bootable by running `vagrant up` followed by a `vagrant ssh` to log in to it.
 
 
 ## Credits

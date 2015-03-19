@@ -5,6 +5,10 @@ all: vm
 vm: prerequisites
 	@echo "building vm"
 	packer build packer/packer_template.json
+	@echo "adding vagrant box"
+	vagrant box add vm vm-virtualbox.box
+	@echo "vagrant box added"
+	@echo "start it by running: vagrant up"
 
 prerequisites:
 	@echo "checking prerequisites"
