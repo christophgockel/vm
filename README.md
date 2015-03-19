@@ -18,7 +18,7 @@ Creating and provisioning a new VM is as easy as executing `make`.
 The steps taken care of by the `Makefile` are as follows:
 
 1. Check if all the necessary components are available (and install what's missing)
-2. Use Packer to create the base ISO image
+2. Use Packer to create the base ISO image and build a Vagrant box with it
 
 
 ## Credits

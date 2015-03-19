@@ -1,3 +1,4 @@
 .DS*
 packer_cache
 output-*
+*.box

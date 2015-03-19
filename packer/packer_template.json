@@ -55,5 +55,13 @@
       "execute_command": "{{user `sudo`}} '{{.Path}}'",
       "scripts": ["packer/postinstall/postinstall.sh"]
     }
+  ],
+
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "vm-{{.Provider}}.box",
+      "vagrantfile_template": "packer/post_processing/Vagrantfile.template"
+    }
   ]
 }
