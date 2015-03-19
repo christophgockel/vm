@@ -1,12 +1,14 @@
-.PHONY: vm prerequisites
+SSH_PUBLIC_KEY=$(shell cat packer/keys/vm.pub)
+
+.PHONY: vm prerequisites clean
 
 all: vm
 
 vm: prerequisites
 	@echo "building vm"
-	packer build packer/packer_template.json
+	packer build --force=true --only=virtualbox-iso -var 'ssh_public_key=$(SSH_PUBLIC_KEY)' packer/packer_template.json
 	@echo "adding vagrant box"
-	vagrant box add vm vm-virtualbox.box
+	vagrant box add --force vm vm-virtualbox.box
 	@echo "vagrant box added"
 	@echo "start it by running: vagrant up"
 
@@ -35,3 +37,6 @@ prerequisites:
 		brew cask install virtualbox; \
 	fi
 
+clean:
+	rm -rf output-*
+	rm -rf *.box

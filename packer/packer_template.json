@@ -6,6 +6,7 @@
     "ssh_name":  "vagrant",
     "ssh_pass":  "vagrant",
     "ssh_port":  "22",
+    "ssh_public_key": "",
     "sudo": "echo 'vagrant' | sudo -S sh"
   },
 
@@ -54,6 +55,17 @@
       "type": "shell",
       "execute_command": "{{user `sudo`}} '{{.Path}}'",
       "scripts": ["packer/postinstall/postinstall.sh"]
+    },
+    {
+      "type": "shell",
+      "execute_command": "{{user `sudo`}} '{{.Path}}'",
+      "inline": [
+        "echo '{{user `ssh_public_key`}}' > /home/vagrant/.ssh/authorized_keys",
+        "chmod 600 /home/vagrant/.ssh/authorized_keys",
+        "chown -R vagrant /home/vagrant/.ssh",
+        "sed -i -e 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config",
+        "sudo service ssh restart"
+      ]
     }
   ],
 
