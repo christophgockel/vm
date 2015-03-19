@@ -1,1 +1,3 @@
 .DS*
+packer_cache
+output-*

@@ -1,0 +1,59 @@
+{
+  "variables": {
+    "cpus":      1,
+    "memory":    "4096",
+    "disk_size": "20480",
+    "ssh_name":  "vagrant",
+    "ssh_pass":  "vagrant",
+    "ssh_port":  "22",
+    "sudo": "echo 'vagrant' | sudo -S sh"
+  },
+
+  "builders": [{
+    "type": "virtualbox-iso",
+    "guest_os_type": "Ubuntu_64",
+
+    "iso_url": "http://releases.ubuntu.com/trusty/ubuntu-14.04.2-server-amd64.iso",
+    "iso_checksum": "8acd2f56bfcba2f7ac74a7e4a5e565ce68c024c38525c0285573e41c86ae90c0",
+    "iso_checksum_type": "sha256",
+
+    "vm_name": "vm",
+    "vboxmanage": [
+      ["modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}"],
+      ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"]
+    ],
+
+    "disk_size": "{{user `disk_size`}}",
+
+    "http_directory": "packer/preseed",
+    "http_port_min": 9001,
+    "http_port_max": 9001,
+
+    "ssh_username": "{{user `ssh_name`}}",
+    "ssh_password": "{{user `ssh_pass`}}",
+    "ssh_port": "{{user `ssh_port`}}",
+    "ssh_wait_timeout": "20m",
+
+    "shutdown_command": "echo {{user `ssh_name`}} | sudo -S shutdown -P now",
+
+    "headless": "false",
+
+    "boot_command": [
+      "<esc><esc><enter><wait>",
+      "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+      "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+      "hostname={{ .Name }} ",
+      "fb=false debconf/frontend=noninteractive ",
+      "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+      "initrd=/install/initrd.gz -- <enter>"
+    ]
+  }],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "{{user `sudo`}} '{{.Path}}'",
+      "scripts": ["packer/postinstall/postinstall.sh"]
+    }
+  ]
+}
