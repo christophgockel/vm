@@ -1,6 +1,6 @@
 SSH_PUBLIC_KEY=$(shell cat packer/keys/vm.pub)
 
-.PHONY: vm prerequisites clean
+.PHONY: all vm prerequisites clean
 
 all: vm
 
@@ -10,7 +10,10 @@ vm: prerequisites
 	@echo "adding vagrant box"
 	vagrant box add --force vm vm-virtualbox.box
 	@echo "vagrant box added"
+	vagrant provision
+	@echo "vagrant box provisioned"
 	@echo "start it by running: vagrant up"
+	@echo "log in to it by running: vagrant ssh"
 
 prerequisites:
 	@echo "checking prerequisites"
