@@ -15,6 +15,10 @@ execute 'install dotfiles: base16' do
   environment 'HOME' => '/home/vagrant'
   cwd dotfile_directory
   command 'sh base16/install.sh'
+
+  not_if do
+    ::File.directory?("#{dotfile_directory}/base16/base16-shell")
+  end
 end
 
 execute 'install dotfiles: vim - pathogen' do
@@ -23,6 +27,10 @@ execute 'install dotfiles: vim - pathogen' do
   environment 'HOME' => '/home/vagrant'
   cwd dotfile_directory
   command 'sh vim/install_pathogen.sh'
+
+  not_if do
+    ::File.exists?('/home/vagrant/.vim/autoload/pathogen.vim')
+  end
 end
 
 execute 'install dotfiles: vim - plugins' do
@@ -31,6 +39,10 @@ execute 'install dotfiles: vim - plugins' do
   environment 'HOME' => '/home/vagrant'
   cwd dotfile_directory
   command 'ruby vim/update_plugins.rb'
+
+  not_if do
+    ::File.directory?("/home/vagrant/.vim/bundle")
+  end
 end
 
 execute 'install dotfiles: linking resource files' do
@@ -39,4 +51,10 @@ execute 'install dotfiles: linking resource files' do
   environment 'HOME' => '/home/vagrant'
   cwd dotfile_directory
   command 'sh create_symlinks.sh'
+
+  not_if do
+    ::File.exists?('/home/vagrant/.vimrc') &&
+    ::File.exists?('/home/vagrant/.zshrc') &&
+    ::File.exists?('/home/vagrant/.tmux.conf')
+  end
 end
