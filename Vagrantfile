@@ -12,6 +12,7 @@ Vagrant.configure('2') do |config|
     chef.add_recipe "dotfiles"
     chef.add_recipe "zsh"
     chef.add_recipe "chruby"
+    chef.add_recipe "ruby-build"
   end
 
 #  config.vm.provider :virtualbox do |vb|
