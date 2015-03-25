@@ -15,6 +15,10 @@ Vagrant.configure('2') do |config|
     chef.add_recipe "ruby-build"
   end
 
+  if File.exists?('hostname')
+    config.vm.hostname = File.read('hostname').gsub(/\n/, '').strip
+  end
+
 #  config.vm.provider :virtualbox do |vb|
 #    vb.gui = true
 #  end

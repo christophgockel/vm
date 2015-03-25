@@ -3,3 +3,4 @@ packer_cache
 output-*
 *.box
 .vagrant
+hostname
