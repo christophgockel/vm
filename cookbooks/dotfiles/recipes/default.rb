@@ -40,9 +40,7 @@ execute 'install dotfiles: vim - plugins' do
   cwd dotfile_directory
   command 'ruby vim/update_plugins.rb'
 
-  not_if do
-    ::File.directory?("/home/vagrant/.vim/bundle")
-  end
+  not_if 'find $HOME/.vim/bundle -mindepth 1 -print -quit | grep -q .'
 end
 
 execute 'install dotfiles: linking resource files' do
