@@ -1,10 +1,13 @@
 # vim: set ft=ruby:
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'vm'
+  config.vm.box = '#BOXNAME#'
+  config.vm.hostname = config.vm.box
 
   config.ssh.forward_agent    = true
   config.ssh.private_key_path = 'packer/keys/vm'
+
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
 
   config.vm.provision "chef_solo" do |chef|
     chef.add_recipe "vim"
@@ -14,13 +17,5 @@ Vagrant.configure('2') do |config|
     chef.add_recipe "chruby"
     chef.add_recipe "ruby-build"
   end
-
-  if File.exists?('hostname')
-    config.vm.hostname = File.read('hostname').gsub(/\n/, '').strip
-  end
-
-#  config.vm.provider :virtualbox do |vb|
-#    vb.gui = true
-#  end
 end
 
