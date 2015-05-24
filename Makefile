@@ -1,7 +1,6 @@
 SSH_PUBLIC_KEY = $(shell cat packer/keys/vm.pub)
-BOXNAME        = $(shell read -p "provide a hostname for the new box: "; echo $$REPLY | tr '[A-Z]' '[a-z]' | tr ' ' '-')
 
-.PHONY: all vm prerequisites clean
+.PHONY: all vm prerequisites boxname clean
 
 all: vm
 
@@ -16,9 +15,12 @@ vm: prerequisites Vagrantfile
 	@echo "start it by running: vagrant up"
 	@echo "log in to it by running: vagrant ssh"
 
-Vagrantfile:
+Vagrantfile: boxname
 	@sed -e 's/#BOXNAME#/$(BOXNAME)/' < Vagrantfile.template > Vagrantfile
 	@echo "created Vagrantfile"
+
+boxname:
+	$(eval BOXNAME := $(shell read -p "name: "; echo $$REPLY | tr '[A-Z]' '[a-z]' | tr ' ' '-'))
 
 prerequisites:
 	@echo "checking prerequisites"
