@@ -18,9 +18,8 @@ sed -i -e '/Defaults\s\+env_reset/a Defaults\tenv_keep+=SSH_AUTH_SOCK' /etc/sudo
 sed -i -e '/Defaults\s\+env_reset/a Defaults\tenv_keep+=PATH' /etc/sudoers
 sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 
-# apt-get install various things necessary (e.g., NFS client, Ruby)
-# and remove optional things to trim down the machine.
-apt-get -y install nfs-common openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev autoconf libc6-dev libncurses5-dev automake libtool bison pkg-config libgdbm-dev libffi-dev ruby-dev
+# apt-get install various things
+apt-get -y install nfs-common openssl curl git-core sqlite3 autoconf automake bison pkg-config
 apt-get clean
 
 # Create .ssh directory
@@ -33,7 +32,7 @@ apt-get -y autoremove
 
 # Zero out the free space to save space in the final image:
 echo "Zeroing device to make space..."
-dd if=/dev/zero of=/EMPTY bs=1M
+dd if=/dev/zero of=/EMPTY bs=1M | true
 rm -f /EMPTY
 
 # Sync to ensure that the delete completes before this moves on.
