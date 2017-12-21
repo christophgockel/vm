@@ -1,11 +1,11 @@
 # vim: set ft=ruby:
 
 Vagrant.configure('2') do |config|
-  config.vm.box = '#BOXNAME#'
+  config.vm.box = "vm"
   config.vm.hostname = config.vm.box
 
   config.ssh.forward_agent    = true
-  config.ssh.private_key_path = 'packer/keys/vm'
+  config.ssh.private_key_path = "packer/keys/vm"
 
   config.vm.network "forwarded_port", guest: 8080, host: 8080
 
