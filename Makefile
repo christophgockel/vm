@@ -10,10 +10,11 @@ vm: prerequisites Vagrantfile
 	@echo "adding vagrant box"
 	vagrant box add --force vm vm-virtualbox.box
 	@echo "vagrant box added"
-	vagrant provision
-	@echo "vagrant box provisioned"
 	@echo "start it by running: vagrant up"
 	@echo "log in to it by running: vagrant ssh"
+	@echo
+	@echo "Don't forget to activate base16 on first login by running:"
+	@echo "base16_default-dark"
 
 Vagrantfile:
 	@cp Vagrantfile.template Vagrantfile

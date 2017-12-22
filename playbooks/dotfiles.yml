@@ -1,0 +1,38 @@
+- name: Clone dotfiles
+  git:
+    repo: git@github.com:christophgockel/dotfiles.git
+    dest: /home/vagrant/.dotfiles
+    accept_hostkey: yes
+
+- name: Adjust permissions of dotfiles
+  file:
+    path: /home/vagrant/.dotfiles
+    owner: vagrant
+    group: vagrant
+    recurse: yes
+
+- stat:
+    path: /home/vagrant/.dotfiles/base16/base16-shell
+  register: base16_installation
+
+- name: Install base16 colours
+  become: yes
+  become_user: vagrant
+  shell: cd /home/vagrant/.dotfiles/base16 && sh ./install.sh
+  when: base16_installation.stat.exists == False
+
+- name: Link rc files
+  become: yes
+  become_user: vagrant
+  shell: cd /home/vagrant/.dotfiles && sh ./create_symlinks.sh
+
+- stat:
+    path: /home/vagrant/.vim/plugged
+  register: vim_plugins
+
+- name: Install vim plugins
+  become: yes
+  become_user: vagrant
+  shell: vim +PlugInstall +qall
+  when: vim_plugins.stat.exists == False
+

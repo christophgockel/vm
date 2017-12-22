@@ -5,3 +5,4 @@ output-*
 .vagrant
 vagrant_share
 Vagrantfile
+*.retry

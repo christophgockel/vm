@@ -1,0 +1,9 @@
+- name: Install zsh
+  apt:
+    name: zsh
+
+- name: Make zsh the default shell
+  user:
+    name: vagrant
+    shell: /bin/zsh
+

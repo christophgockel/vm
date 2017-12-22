@@ -1,0 +1,7 @@
+- hosts: all
+  become: true
+  tasks:
+    - import_tasks: dev-tools.yml
+    - import_tasks: zsh.yml
+    - import_tasks: dotfiles.yml
+
