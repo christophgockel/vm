@@ -2,14 +2,16 @@
 
 Create new virtual machines as disposable development environments. Batteries included.
 
+
 ## Prerequisites
 
-Uses [Packer](https://www.packer.io), [Vagrant](https://www.vagrantup.com) and [VirtualBox](https://www.virtualbox.org).
+Uses [Packer](https://www.packer.io), [Vagrant](https://www.vagrantup.com), [Ansible](https://www.ansible.com/) and [VirtualBox](https://www.virtualbox.org).
 
 If these components are already available on your host-system, you're good to go.
 If not, the `Makefile` tries to use [Homebrew](http://brew.sh) to download and install the needed components.
 
-Currently tested and used with Mac OS X 10.10, Packer 0.7.5, Vagrant 1.7.0 and VirtualBox 4.3.8.
+Currently tested and used with Mac OS X 10.13, Packer 1.1.3, Vagrant 2.0.1 and VirtualBox 5.2.4.
+
 
 ## Creating a New VM
 
@@ -25,6 +27,7 @@ From there on the new VM is bootable by running `vagrant up` followed by a `vagr
 
 
 ## Credits
+
 General idea and initial configuration copied from [skim](https://github.com/sl4m) and his [vm repo](https://github.com/sl4m/vm).
 
 :boom: :goat: :hamburger:
