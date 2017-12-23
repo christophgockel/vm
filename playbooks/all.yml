@@ -2,7 +2,7 @@
   become: true
   tasks:
     - import_tasks: dev-tools.yml
-    - include_tasks: ruby.yml chruby_version=0.3.9
+    - include_tasks: ruby.yml chruby_version=0.3.9 ruby_install_version=0.6.1 ruby_version=2.4.3
     - import_tasks: zsh.yml
     - import_tasks: dotfiles.yml
 

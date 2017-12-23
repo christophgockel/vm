@@ -3,25 +3,20 @@
     path: /usr/local/bin/chruby-exec
   register: chruby
 
-- name: Check for chruby download
+- name: Check for chruby archive
   stat:
-    path: /tmp/chruby-{{ chruby_version }}.tar.gz
+    path: /tmp/chruby-{{ chruby_version }}
   when: chruby.stat.exists == False
   register: chruby_archive
 
-- name: Download chruby {{ chruby_version }}
-  get_url: url="http://github.com/postmodern/chruby/archive/v{{ chruby_version }}.tar.gz"
-           dest="/tmp/chruby-{{ chruby_version }}.tar.gz"
+- name: Download and unzip chruby {{ chruby_version }}
+  unarchive:
+    src: http://github.com/postmodern/chruby/archive/v{{ chruby_version }}.tar.gz
+    dest: /tmp
+    remote_src: yes
   when:
     - chruby.stat.exists == False
     - chruby_archive.stat.exists == False
-  register: chruby_download
-
-- name: Unzip chruby
-  command: tar xf /tmp/chruby-{{ chruby_version }}.tar.gz
-  args:
-    chdir: /tmp
-  when: chruby_download.changed == True
   register: chruby_unzipped
 
 - name: Install chruby {{ chruby_version }}
@@ -29,4 +24,47 @@
   args:
     chdir: /tmp/chruby-{{ chruby_version }}
   when: chruby_unzipped.changed == True
+
+- name: Check if ruby-install {{ ruby_install_version }} is already installed
+  stat:
+    path: /usr/local/bin/ruby-install
+  register: ruby_install
+
+- name: Check for ruby-install archive
+  stat:
+    path: /tmp/ruby-install-{{ ruby_install_version }}
+  when: ruby_install.stat.exists == False
+  register: ruby_install_archive
+
+- name: Download and unzip ruby-install
+  unarchive:
+    src: http://github.com/postmodern/ruby-install/archive/v{{ ruby_install_version }}.tar.gz
+    dest: /tmp
+    remote_src: yes
+  when:
+    - ruby_install.stat.exists == False
+    - ruby_install_archive.stat.exists == False
+  register: ruby_install_unzipped
+
+- name: Install ruby-install {{ ruby_install_version }}
+  command: make install
+  args:
+    chdir: /tmp/ruby-install-{{ ruby_install_version }}
+  when: ruby_install.stat.exists == False or ruby_install_unzipped.changed == True
+  register: ruby_install_installed
+
+- name: Get latest Ruby versions
+  command: ruby-install
+  when: ruby_install_installed.changed == True
+
+- name: Check if Ruby {{ ruby_version }} is already installed
+  stat:
+    path: /home/vagrant/.rubies/ruby-{{ ruby_version}}/bin/ruby
+  register: ruby
+
+- name: Install Ruby {{ ruby_version }} (might take a while)
+  become: yes
+  become_user: vagrant
+  command: ruby-install ruby {{ ruby_version }}
+  when: ruby.stat.exists == False
 
