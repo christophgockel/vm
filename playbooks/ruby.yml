@@ -1,0 +1,32 @@
+- name: Check if chruby {{ chruby_version }} is already installed
+  stat:
+    path: /usr/local/bin/chruby-exec
+  register: chruby
+
+- name: Check for chruby download
+  stat:
+    path: /tmp/chruby-{{ chruby_version }}.tar.gz
+  when: chruby.stat.exists == False
+  register: chruby_archive
+
+- name: Download chruby {{ chruby_version }}
+  get_url: url="http://github.com/postmodern/chruby/archive/v{{ chruby_version }}.tar.gz"
+           dest="/tmp/chruby-{{ chruby_version }}.tar.gz"
+  when:
+    - chruby.stat.exists == False
+    - chruby_archive.stat.exists == False
+  register: chruby_download
+
+- name: Unzip chruby
+  command: tar xf /tmp/chruby-{{ chruby_version }}.tar.gz
+  args:
+    chdir: /tmp
+  when: chruby_download.changed == True
+  register: chruby_unzipped
+
+- name: Install chruby {{ chruby_version }}
+  command: make install
+  args:
+    chdir: /tmp/chruby-{{ chruby_version }}
+  when: chruby_unzipped.changed == True
+
